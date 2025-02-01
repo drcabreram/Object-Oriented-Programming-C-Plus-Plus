@@ -12,3 +12,4 @@ int main() {
     return 0;
 }
 
+g++ Hello.cpp -o Hello.
