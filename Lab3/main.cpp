@@ -3,31 +3,47 @@
 
 using namespace std;
 
+void gameLoop(RPG* p1, RPG* p2);
+void displayStats(RPG* p1, RPG* p2);
+void displayEnd(RPG p1, RPG p2);
+
 int main() {
-
-    RPG defaultCharacter;
-
-
-    RPG customCharacter("Hero", 120, 15, 12, "mage");
-
-
-    cout << "Default Character: " << defaultCharacter.getName() << endl;
-    cout << "Health: " << defaultCharacter.getHealth() << endl;
-    cout << "Strength: " << defaultCharacter.getStrength() << endl;
-    cout << "Defense: " << defaultCharacter.getDefense() << endl;
-    cout << "Is Alive? " << (defaultCharacter.isAlive() ? "Yes" : "No") << endl;
-
-    cout << "\nCustom Character: " << customCharacter.getName() << endl;
-    cout << "Health: " << customCharacter.getHealth() << endl;
-    cout << "Strength: " << customCharacter.getStrength() << endl;
-    cout << "Defense: " << customCharacter.getDefense() << endl;
-    cout << "Is Alive? " << (customCharacter.isAlive() ? "Yes" : "No") << endl;
-
-
-    cout << "\nUpdating default character's health to 0...\n";
-    defaultCharacter.updateHealth(0);
-    cout << "Health after update: " << defaultCharacter.getHealth() << endl;
-    cout << "Is Alive after update? " << (defaultCharacter.isAlive() ? "Yes" : "No") << endl;
-
+    RPG p1 = RPG("Wiz", 70, 45, 15, "mage");
+    RPG p2 = RPG();
+    p2.setSkills();
+    gameLoop(&p1, &p2);
+    displayEnd(p1, p2);
     return 0;
+}
+
+void gameLoop(RPG* p1, RPG* p2) {
+    p1->setSkills();
+    p2->setSkills();
+
+    while (p1->isAlive() && p2->isAlive()) {
+        cout << p1->getName() << "'s turn" << endl;
+        displayStats(p1, p2);
+        p1->useSkill(p2);
+        if (!p2->isAlive()) break;
+
+        cout << "===========================" << endl;
+
+        cout << p2->getName() << "'s turn" << endl;
+        displayStats(p1, p2);
+        p2->useSkill(p1);
+
+        cout << "===========================" << endl;
+    }
+}
+
+void displayStats(RPG* p1, RPG* p2) {
+    cout << p1->getName() << " HP: " << p1->getHealth()
+        << " | " << p2->getName() << " HP: " << p2->getHealth() << endl;
+}
+
+void displayEnd(RPG p1, RPG p2) {
+    if (p1.isAlive())
+        cout << p1.getName() << " defeated " << p2.getName() << "....p1 wins" << endl;
+    else
+        cout << p2.getName() << " defeated " << p1.getName() << "....p2 wins" << endl;
 }
